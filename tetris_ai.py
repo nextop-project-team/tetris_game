@@ -84,7 +84,7 @@ class TetrisAI(object):
         for x, y in shape.getCoords(direction, x0, 0):
             data[y + dist, x] = shape.shape
 
-    def calculateScore(self, step1Board, d1, x1, dropDist):
+    def calculateScore(self, step1Board, d1, x1, dropDist): #테스트
         # print("calculateScore")
         t1 = datetime.now()
         width = BOARD_DATA.width
