@@ -11,6 +11,7 @@ from tetris_ai import TETRIS_AI
 
 # TETRIS_AI = None
 # 테트리스
+
 class Tetris(QMainWindow):
     def __init__(self):
         super().__init__()
