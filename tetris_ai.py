@@ -68,14 +68,14 @@ class TetrisAI(object):
         self.dropDown(board, BOARD_DATA.currentShape, d0, x0)
         return board
 
-    def dropDown(self, data, shape, direction, x0):
-        dy = BOARD_DATA.height - 1
-        for x, y in shape.getCoords(direction, x0, 0):
-            yy = 0
+    def dropDown(self, data, shape, direction, x0): #블록모양,방향
+        dy = BOARD_DATA.height - 1 #dy=보드높이-1
+        for x, y in shape.getCoords(direction, x0, 0): #블록방향만큼돌림
+            yy = 0 #yy 0으로설정
             while yy + y < BOARD_DATA.height and (yy + y < 0 or data[(y + yy), x] == Shape.shapeNone):
-                yy += 1
+                yy += 1 #yy+y가 보드높이보다 작고, [yy +y가 0보다 작거나 블록없을동안] yy에 1더함
             yy -= 1
-            if yy < dy:
+            if yy < dy: #yy가 dy(보드높이-1)보다 작을경우
                 dy = yy
         # print("dropDown: shape {0}, direction {1}, x0 {2}, dy {3}".format(shape.shape, direction, x0, dy))
         self.dropDownByDist(data, shape, direction, x0, dy)
@@ -84,7 +84,7 @@ class TetrisAI(object):
         for x, y in shape.getCoords(direction, x0, 0):
             data[y + dist, x] = shape.shape
 
-    def calculateScore(self, step1Board, d1, x1, dropDist): #테스트1
+    def calculateScore(self, step1Board, d1, x1, dropDist):
         # print("calculateScore")
         t1 = datetime.now()
         width = BOARD_DATA.width
