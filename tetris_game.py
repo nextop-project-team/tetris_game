@@ -155,7 +155,7 @@ def drawSquare(painter, x, y, val, s):
     painter.drawLine(x + 1, y + s - 1, x + s - 1, y + s - 1)
     painter.drawLine(x + s - 1, y + s - 1, x + s - 1, y + 1)
 
-#주석
+#주석주석
 class SidePanel(QFrame):
     def __init__(self, parent, gridSize):
         super().__init__(parent)
