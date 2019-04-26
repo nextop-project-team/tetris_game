@@ -84,10 +84,10 @@ class TetrisAI(object):
         for x, y in shape.getCoords(direction, x0, 0):
             data[y + dist, x] = shape.shape
 
-    def calculateScore(self, step1Board, d1, x1, dropDist):
+    def calculateScore(self, step1Board, d1, x1, dropDist): #점수계산
         # print("calculateScore")
-        t1 = datetime.now()
-        width = BOARD_DATA.width
+        t1 = datetime.now() #현재시간
+        width = BOARD_DATA.width #보드 너비높이지정
         height = BOARD_DATA.height
 
         self.dropDownByDist(step1Board, BOARD_DATA.nextShape, d1, x1, dropDist[x1])
