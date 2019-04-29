@@ -109,14 +109,14 @@ class TetrisAI(object):
         holeConfirm = [0] * width
         vHoles, vBlocks = 0, 0
         for y in range(height - 1, -1, -1):
-            hasHole = False
+            hasHole = False  #라인에 블럭유무확인
             hasBlock = False
             for x in range(width):
-                if step1Board[y, x] == Shape.shapeNone:
+                if step1Board[y, x] == Shape.shapeNone: #블럭없으면 hashole = True
                     hasHole = True
                     holeCandidates[x] += 1
                 else:
-                    hasBlock = True
+                    hasBlock = True #블럭있으면 hasblock = True
                     roofY[x] = height - y
                     if holeCandidates[x] > 0:
                         holeConfirm[x] += holeCandidates[x]
