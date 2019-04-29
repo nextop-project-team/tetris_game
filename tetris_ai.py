@@ -1,60 +1,69 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from tetris_model import BOARD_DATA, Shape
+from tetris_model import BOARD_DATA, Shape   #BOARD_DATA, shape 받아옴
 import math
 from datetime import datetime
 import numpy as np
-
+#블럭모양
+ '''ㅁㅁ     ㅁㅁ  ㅁㅁㅁ    ㅁㅁ     
+      ㅁㅁ   ㅁㅁ    ㅁ    ㅁㅁ 
+      Z모양  O모양  T모양  S모양
+   ㅁ     ㅁ        ㅁ
+   ㅁ     ㅁ        ㅁ
+   ㅁ     ㅁ        ㅁ
+   ㅁ     ㅁㅁ    ㅁㅁ   
+  I모양   L모양   J모양
+ '''
 
 class TetrisAI(object):
 
-    def nextMove(self):
-        t1 = datetime.now()
-        if BOARD_DATA.currentShape == Shape.shapeNone:
+    def nextMove(self): #다음움직임
+        t1 = datetime.now() #t1= 현재시간
+        if BOARD_DATA.currentShape == Shape.shapeNone: #model의 현재모양이 없으면 None
             return None
 
-        currentDirection = BOARD_DATA.currentDirection
-        currentY = BOARD_DATA.currentY
-        _, _, minY, _ = BOARD_DATA.nextShape.getBoundingOffsets(0)
-        nextY = -minY
+        currentDirection = BOARD_DATA.currentDirection #model에서 현재방향받아옴
+        currentY = BOARD_DATA.currentY #model에서 현재Y받아옴
+        _, _, minY, _ = BOARD_DATA.nextShape.getBoundingOffsets(0) #최소Y값 받아옴
+        nextY = -minY #다음Y = -최소Y
 
         # print("=======")
-        strategy = None
-        if BOARD_DATA.currentShape.shape in (Shape.shapeI, Shape.shapeZ, Shape.shapeS):
+        strategy = None  #전략? None
+        if BOARD_DATA.currentShape.shape in (Shape.shapeI, Shape.shapeZ, Shape.shapeS): #현재블럭모양 I,Z,S이면
             d0Range = (0, 1)
-        elif BOARD_DATA.currentShape.shape == Shape.shapeO:
+        elif BOARD_DATA.currentShape.shape == Shape.shapeO: #현재블럭모양 O이면
             d0Range = (0,)
-        else:
+        else:#나머지(T,L,J)
             d0Range = (0, 1, 2, 3)
 
-        if BOARD_DATA.nextShape.shape in (Shape.shapeI, Shape.shapeZ, Shape.shapeS):
+        if BOARD_DATA.nextShape.shape in (Shape.shapeI, Shape.shapeZ, Shape.shapeS): #다음블럭모양 I,Z,S이면
             d1Range = (0, 1)
-        elif BOARD_DATA.nextShape.shape == Shape.shapeO:
+        elif BOARD_DATA.nextShape.shape == Shape.shapeO: #다음블럭모양 O이면
             d1Range = (0,)
-        else:
+        else: #나머지(T,L,J)
             d1Range = (0, 1, 2, 3)
 
         for d0 in d0Range:
-            minX, maxX, _, _ = BOARD_DATA.currentShape.getBoundingOffsets(d0)
-            for x0 in range(-minX, BOARD_DATA.width - maxX):
+            minX, maxX, _, _ = BOARD_DATA.currentShape.getBoundingOffsets(d0) #최소,최대X설정
+            for x0 in range(-minX, BOARD_DATA.width - maxX): # 범위 -최소x,보드너비-최대x
                 board = self.calcStep1Board(d0, x0)
                 for d1 in d1Range:
                     minX, maxX, _, _ = BOARD_DATA.nextShape.getBoundingOffsets(d1)
-                    dropDist = self.calcNextDropDist(board, d1, range(-minX, BOARD_DATA.width - maxX))
-                    for x1 in range(-minX, BOARD_DATA.width - maxX):
+                    dropDist = self.calcNextDropDist(board, d1, range(-minX, BOARD_DATA.width - maxX)) #떨어지는거리?
+                    for x1 in range(-minX, BOARD_DATA.width - maxX): #범위(-최소x,보드너비-최대x)
                         score = self.calculateScore(np.copy(board), d1, x1, dropDist)
-                        if not strategy or strategy[2] < score:
-                            strategy = (d0, x0, score)
+                        if not strategy or strategy[2] < score: #strategy또는 strategy[2]둘중하나라도 < score 면
+                            strategy = (d0, x0, score) #strategy = 현재값
         print("===", datetime.now() - t1)
         return strategy
 
     def calcNextDropDist(self, data, d0, xRange):
-        res = {}
-        for x0 in xRange:
+        res = {} #res배열생성
+        for x0 in xRange:#xRange는 range와 비슷,데이터 타입차이
             if x0 not in res:
-                res[x0] = BOARD_DATA.height - 1
-            for x, y in BOARD_DATA.nextShape.getCoords(d0, x0, 0):
+                res[x0] = BOARD_DATA.height - 1 #res[x0]= 보드높이-1
+            for x, y in BOARD_DATA.nextShape.getCoords(d0, x0, 0): #다음블럭좌표값
                 yy = 0
                 while yy + y < BOARD_DATA.height and (yy + y < 0 or data[(y + yy), x] == Shape.shapeNone):
                     yy += 1
@@ -64,7 +73,7 @@ class TetrisAI(object):
         return res
 
     def calcStep1Board(self, d0, x0):
-        board = np.array(BOARD_DATA.getData()).reshape((BOARD_DATA.height, BOARD_DATA.width))
+        board = np.array(BOARD_DATA.getData()).reshape((BOARD_DATA.height, BOARD_DATA.width)) #board = 배열(getData)생성,데이터구조조정
         self.dropDown(board, BOARD_DATA.currentShape, d0, x0)
         return board
 
