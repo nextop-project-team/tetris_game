@@ -14,7 +14,7 @@ import numpy as np
    #ㅁ     ㅁ        ㅁ
    #ㅁ     ㅁㅁ    ㅁㅁ
   #I모양   L모양   J모양
- 
+
 
 class TetrisAI(object):
 
@@ -58,14 +58,14 @@ class TetrisAI(object):
         print("===", datetime.now() - t1)
         return strategy
 
-    def calcNextDropDist(self, data, d0, xRange):
+    def calcNextDropDist(self, data, d0, xRange): #다음떨어지는거리?
         res = {} #res배열생성
         for x0 in xRange:#xRange는 range와 비슷,데이터 타입차이
             if x0 not in res:
                 res[x0] = BOARD_DATA.height - 1 #res[x0]= 보드높이-1
             for x, y in BOARD_DATA.nextShape.getCoords(d0, x0, 0): #다음블럭좌표값
                 yy = 0
-                while yy + y < BOARD_DATA.height and (yy + y < 0 or data[(y + yy), x] == Shape.shapeNone):
+                while yy + y < BOARD_DATA.height and (yy + y < 0 or data[(y + yy), x] == Shape.shapeNone):#yy+y <보드높이,yy+y<0 또는 블럭없을때까지
                     yy += 1
                 yy -= 1
                 if yy < res[x0]:
@@ -96,7 +96,7 @@ class TetrisAI(object):
     def calculateScore(self, step1Board, d1, x1, dropDist): #점수계산
         # print("calculateScore")
         t1 = datetime.now() #현재시간
-        width = BOARD_DATA.width #보드 너비높이지정
+        width = BOARD_DATA.width #보드 너비,높이지정
         height = BOARD_DATA.height
 
         self.dropDownByDist(step1Board, BOARD_DATA.nextShape, d1, x1, dropDist[x1])
