@@ -22,7 +22,7 @@ class Tetris(QMainWindow):
 
         self.initUI()
 
-    def initUI(self):
+    def initUI(self):  #UI 초기화
         self.gridSize = 22
         self.speed = 10
 
@@ -39,14 +39,14 @@ class Tetris(QMainWindow):
         self.statusbar = self.statusBar()
         self.tboard.msg2Statusbar[str].connect(self.statusbar.showMessage)
 
-        self.start()
+        self.start() #초기화, 첫번째 블록 생성, 타이머 시작
 
-        self.center()
+        self.center() #창을 모니터 가운데 배치
         self.setWindowTitle('Tetris')
         self.show()
 
         self.setFixedSize(self.tboard.width() + self.sidePanel.width(),
-                          self.sidePanel.height() + self.statusbar.height())
+                          self.sidePanel.height() + self.statusbar.height()) #창 크기 고정
 
     def center(self):
         screen = QDesktopWidget().screenGeometry()
@@ -66,7 +66,7 @@ class Tetris(QMainWindow):
         BOARD_DATA.createNewPiece()
         self.timer.start(self.speed, self)
 
-    def pause(self):
+    def pause(self): #게임 일시정지
         if not self.isStarted:
             return
 
