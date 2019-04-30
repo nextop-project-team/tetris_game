@@ -29,14 +29,14 @@ class Tetris(QMainWindow):
         self.timer = QBasicTimer()
         self.setFocusPolicy(Qt.StrongFocus)
 
-        hLayout = QHBoxLayout()
+        hLayout = QHBoxLayout()  #수평 레이아웃 배치
         self.tboard = Board(self, self.gridSize)
         hLayout.addWidget(self.tboard)
 
         self.sidePanel = SidePanel(self, self.gridSize)
         hLayout.addWidget(self.sidePanel)
 
-        self.statusbar = self.statusBar()
+        self.statusbar = self.statusBar() #상태바 생성
         self.tboard.msg2Statusbar[str].connect(self.statusbar.showMessage)
 
         self.start() #초기화, 첫번째 블록 생성, 타이머 시작
