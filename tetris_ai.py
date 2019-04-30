@@ -6,15 +6,14 @@ import math
 from datetime import datetime
 import numpy as np
 #블럭모양
- #  ㅁㅁ     ㅁㅁ  ㅁㅁㅁ    ㅁㅁ
- #     ㅁㅁ   ㅁㅁ    ㅁ    ㅁㅁ
- #     Z모양  O모양  T모양  S모양
- #  ㅁ     ㅁ        ㅁ
- #  ㅁ     ㅁ        ㅁ
- #  ㅁ     ㅁ        ㅁ
- #  ㅁ     ㅁㅁ    ㅁㅁ
- # I모양   L모양   J모양
-
+#  ㅁㅁ     ㅁㅁ  ㅁㅁㅁ    ㅁㅁ
+#     ㅁㅁ   ㅁㅁ    ㅁ    ㅁㅁ
+#     Z모양  O모양  T모양  S모양
+#  ㅁ     ㅁ        ㅁ
+#  ㅁ     ㅁ        ㅁ
+#  ㅁ     ㅁ        ㅁ
+#  ㅁ     ㅁㅁ    ㅁㅁ
+# I모양   L모양   J모양
 
 class TetrisAI(object):
 
