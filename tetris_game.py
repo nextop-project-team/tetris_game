@@ -138,36 +138,38 @@ class Tetris(QMainWindow):
         self.updateWindow()
 
 
-def drawSquare(painter, x, y, val, s):
+def drawSquare(painter, x, y, val, s): # 블럭의 정보를 받아서 그리는 역할을 함
     colorTable = [0x000000, 0xCC6666, 0x66CC66, 0x6666CC,
                   0xCCCC66, 0xCC66CC, 0x66CCCC, 0xDAAA00]
-
+    # 각 블럭의 색을 미리 지정해놓음
     if val == 0:
         return
 
     color = QColor(colorTable[val])
     painter.fillRect(x + 1, y + 1, s - 2, s - 2, color)
-
+    # 블럭 모양대로 색을 채움
     painter.setPen(color.lighter())
     painter.drawLine(x, y + s - 1, x, y)
     painter.drawLine(x, y, x + s - 1, y)
-
+    # 채운 색 주변에 어두운색 테두리를 그림
     painter.setPen(color.darker())
     painter.drawLine(x + 1, y + s - 1, x + s - 1, y + s - 1)
     painter.drawLine(x + s - 1, y + s - 1, x + s - 1, y + 1)
+    # 어두운색 테두리 바깥에 또 밝은색 테두리를 그림
 
-#주석주석
-class SidePanel(QFrame):
+class SidePanel(QFrame): # 사이드패널 클래스
     def __init__(self, parent, gridSize):
         super().__init__(parent)
         self.setFixedSize(gridSize * 5, gridSize * BOARD_DATA.height)
+        # 사이드패널의 가로를 gridsize * 5, 세로를 gridsize * 보드의 height로 설정한다
         self.move(gridSize * BOARD_DATA.width, 0)
+        # 사이드패널이 다른 보드와 겹치지 않도록 위치를 조정함
         self.gridSize = gridSize
 
-    def updateData(self):
+    def updateData(self): # 데이터를 갱신
         self.update()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event): # 다음에 나올 블럭을 오른쪽에 표시하는 코드인것 같음
         painter = QPainter(self)
         minX, maxX, minY, maxY = BOARD_DATA.nextShape.getBoundingOffsets(0)
 
@@ -189,25 +191,25 @@ class Board(QFrame):
         self.gridSize = gridSize
         self.initBoard()
 
-    def initBoard(self):
+    def initBoard(self): # 점수를 0으로 초기화함
         self.score = 0
         BOARD_DATA.clear()
 
     def paintEvent(self, event):
         painter = QPainter(self)
 
-        # Draw backboard
+        # Draw backboard 뒤의 백보드를 그림
         for x in range(BOARD_DATA.width):
             for y in range(BOARD_DATA.height):
                 val = BOARD_DATA.getValue(x, y)
                 drawSquare(painter, x * self.gridSize, y * self.gridSize, val, self.gridSize)
 
-        # Draw current shape
+        # Draw current shape 다음 블럭의 정보를 받아서 drawSquare 함수를 호출해서 블럭을 그림
         for x, y in BOARD_DATA.getCurrentShapeCoord():
             val = BOARD_DATA.currentShape.shape
             drawSquare(painter, x * self.gridSize, y * self.gridSize, val, self.gridSize)
 
-        # Draw a border
+        # Draw a border 보더를 그림
         painter.setPen(QColor(0x777777))
         painter.drawLine(self.width()-1, 0, self.width()-1, self.height())
         painter.setPen(QColor(0xCCCCCC))
