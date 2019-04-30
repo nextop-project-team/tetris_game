@@ -9,7 +9,7 @@ from PyQt5.QtGui import QPainter, QColor
 from tetris_model import BOARD_DATA, Shape
 from tetris_ai import TETRIS_AI
 
-# TETRIS_AI = None
+#TETRIS_AI = None
 # 테트리스
 
 class Tetris(QMainWindow):
@@ -80,7 +80,7 @@ class Tetris(QMainWindow):
 
         self.updateWindow()
 
-    def updateWindow(self):
+    def updateWindow(self): #화면 업데이트
         self.tboard.updateData()
         self.sidePanel.updateData()
         self.update()
@@ -111,26 +111,26 @@ class Tetris(QMainWindow):
         else:
             super(Tetris, self).timerEvent(event)
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event):  #키 조작 부분
         if not self.isStarted or BOARD_DATA.currentShape == Shape.shapeNone:
             super(Tetris, self).keyPressEvent(event)
             return
 
         key = event.key()
         
-        if key == Qt.Key_P:
+        if key == Qt.Key_P: # P키 = 일시정지
             self.pause()
             return
             
         if self.isPaused:
             return
-        elif key == Qt.Key_Left:
+        elif key == Qt.Key_Left: #좌
             BOARD_DATA.moveLeft()
-        elif key == Qt.Key_Right:
+        elif key == Qt.Key_Right: #우
             BOARD_DATA.moveRight()
-        elif key == Qt.Key_Up:
+        elif key == Qt.Key_Up: #상
             BOARD_DATA.rotateLeft()
-        elif key == Qt.Key_Space:
+        elif key == Qt.Key_Space: #스페이스바 : 현재블럭을 즉시 아래로 이동
             self.tboard.score += BOARD_DATA.dropDown()
         else:
             super(Tetris, self).keyPressEvent(event)
