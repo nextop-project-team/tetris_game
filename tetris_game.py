@@ -117,7 +117,10 @@ class Tetris(QMainWindow):
             return
 
         key = event.key()
-        
+
+        if key == Qt.Key_R:
+            self.start()
+            return
         if key == Qt.Key_P: # P키 = 일시정지
             self.pause()
             return
