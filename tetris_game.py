@@ -24,7 +24,7 @@ class Tetris(QMainWindow):
 
     def initUI(self):  #UI 초기화
         self.gridSize = 22
-        self.speed = 10
+        self.speed = 50
 
         self.timer = QBasicTimer()
         self.setFocusPolicy(Qt.StrongFocus)
@@ -128,7 +128,7 @@ class Tetris(QMainWindow):
             BOARD_DATA.moveLeft()
         elif key == Qt.Key_Right: #우
             BOARD_DATA.moveRight()
-        elif key == Qt.Key_Up: #상
+        elif key == Qt.Key_Up: #블록 회전
             BOARD_DATA.rotateLeft()
         elif key == Qt.Key_Space: #스페이스바 : 현재블럭을 즉시 아래로 이동
             self.tboard.score += BOARD_DATA.dropDown()

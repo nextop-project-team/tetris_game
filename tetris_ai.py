@@ -44,11 +44,11 @@ class TetrisAI(object):
         else: #나머지(T,L,J)
             d1Range = (0, 1, 2, 3)
 
-        for d0 in d0Range:
+        for d0 in d0Range: #위에서 설정한 d0 범위 탐색
             minX, maxX, _, _ = BOARD_DATA.currentShape.getBoundingOffsets(d0) #최소,최대X설정
             for x0 in range(-minX, BOARD_DATA.width - maxX): # 범위 -최소x,보드너비-최대x
                 board = self.calcStep1Board(d0, x0)
-                for d1 in d1Range:
+                for d1 in d1Range: #d1범위 탐색
                     minX, maxX, _, _ = BOARD_DATA.nextShape.getBoundingOffsets(d1)
                     dropDist = self.calcNextDropDist(board, d1, range(-minX, BOARD_DATA.width - maxX)) #떨어지는거리?
                     for x1 in range(-minX, BOARD_DATA.width - maxX): #범위(-최소x,보드너비-최대x)
