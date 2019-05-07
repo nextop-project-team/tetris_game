@@ -54,7 +54,8 @@ class TetrisAI(object):
                     for x1 in range(-minX, BOARD_DATA.width - maxX): #범위(-최소x,보드너비-최대x)
                         score = self.calculateScore(np.copy(board), d1, x1, dropDist)
                         if not strategy or strategy[2] < score: #strategy또는 strategy[2]둘중하나라도 < score 면
-                            strategy = (d0, x0, score) #d0=회전수,x0=x좌표 좌측하단이 기준
+                            strategy = (d0, x0, score) #d0=회전수,x0=x좌표 좌측하단이 기준, 블럭이 쌓인층이 많을수록 score작아짐
+                                                       #쌓인블럭 제거할수록 score값 증가함
         print("===", datetime.now() - t1) #걸린시간인듯
         print(strategy)
         return strategy
