@@ -24,7 +24,7 @@ class Tetris(QMainWindow):
 
     def initUI(self):  #UI 초기화
         self.gridSize = 22
-        self.speed = 50
+        self.speed = 10
 
         self.timer = QBasicTimer()
         self.setFocusPolicy(Qt.StrongFocus)

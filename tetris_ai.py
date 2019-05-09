@@ -132,13 +132,14 @@ class TetrisAI(object):
         maxHeight = max(roofY) - fullLines
         # print(datetime.now() - t1)
 
+
         roofDy = [roofY[i] - roofY[i+1] for i in range(len(roofY) - 1)]
 
-        if len(roofY) <= 0:
+        if len(roofY) <= 0:#roofY의 표준편차
             stdY = 0
         else:
             stdY = math.sqrt(sum([y ** 2 for y in roofY]) / len(roofY) - (sum(roofY) / len(roofY)) ** 2)
-        if len(roofDy) <= 0:
+        if len(roofDy) <= 0: #roofDy의 표준편차
             stdDY = 0
         else:
             stdDY = math.sqrt(sum([y ** 2 for y in roofDy]) / len(roofDy) - (sum(roofDy) / len(roofDy)) ** 2)
@@ -149,7 +150,7 @@ class TetrisAI(object):
 
         score = fullLines * 1.8 - vHoles * 1.0 - vBlocks * 0.5 - maxHeight ** 1.5 * 0.02 \
             - stdY * 0.0 - stdDY * 0.01 - absDy * 0.2 - maxDy * 0.3
-       # print(score, fullLines, vHoles, vBlocks, maxHeight, stdY, stdDY, absDy, roofY, d0, x0, d1, x1)
+        #print(score, fullLines, vHoles, vBlocks, maxHeight, stdY, stdDY, absDy, roofY, d1, x1)
         return score
 
 
