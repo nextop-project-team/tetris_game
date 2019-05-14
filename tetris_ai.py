@@ -58,6 +58,7 @@ class TetrisAI(object):
                                                        #쌓인블럭 제거할수록 score값 증가함
         print("===", datetime.now() - t1) #걸린시간인듯
         print(strategy)
+        print(BOARD_DATA.backBoard)
         return strategy
 
     def calcNextDropDist(self, data, d0, xRange):
