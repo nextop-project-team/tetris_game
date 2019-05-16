@@ -60,10 +60,10 @@ class TetrisAI(object):
         print(strategy)
 
         f = open('data.txt', 'a+')
-
         data = [str(1 if i>=1 else 0) for i in BOARD_DATA.getData()]
-
         f.writelines(','.join(data))
+        f.write(",")
+        f.write(str(BOARD_DATA.currentShape.shape))
         f.write("\n")
         f.close()
         print(BOARD_DATA.getData())
