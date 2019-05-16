@@ -5,6 +5,7 @@ from tetris_model import BOARD_DATA, Shape   #BOARD_DATA, shape 받아옴
 import math
 from datetime import datetime
 import numpy as np
+import sys
 #블럭모양
  #ㅁㅁ     ㅁㅁ  ㅁㅁㅁ    ㅁㅁ
   # ㅁㅁ   ㅁㅁ    ㅁ    ㅁㅁ
@@ -14,7 +15,6 @@ import numpy as np
    #ㅁ     ㅁ        ㅁ
    #ㅁ     ㅁㅁ    ㅁㅁ
   #I모양   L모양   J모양
-
 
 class TetrisAI(object):
 
@@ -58,7 +58,15 @@ class TetrisAI(object):
                                                        #쌓인블럭 제거할수록 score값 증가함
         print("===", datetime.now() - t1) #걸린시간인듯
         print(strategy)
-#       print(BOARD_DATA.backBoard)
+
+        f = open('data.txt', 'a+')
+
+        data = [str(1 if i>=1 else 0) for i in BOARD_DATA.getData()]
+
+        f.writelines(','.join(data))
+        f.write("\n")
+        f.close()
+        print(BOARD_DATA.getData())
         return strategy
 
     def calcNextDropDist(self, data, d0, xRange):
