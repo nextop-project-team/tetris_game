@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import random
+import tensorflow as tf
 
 class Shape(object):
     shapeNone = 0
