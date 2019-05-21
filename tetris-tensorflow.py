@@ -4,10 +4,15 @@ import numpy as np
 
 
 xy = np.loadtxt('1.csv', delimiter=',', dtype=np.float32)
-#inputshape_data = xy[0] x1
-inputboard_data = xy[0:220] # 0에는 블럭모양 나머지는 보드값 --입력값,x2
+inputshape_data = xy[0] #입력 블럭모양
+inputboard_data = xy[0:220] #보드데이터
 y_data = xy[220:222]  #y데이터에 뭘 넣어야할지
 
+
+#outputmovex_data= xy[] #출력 x움직임
+#outputrotate_data = xy[] #출력회전수
+#rotate_data = [] #회전수
+#movex_data = [] #움직일 x좌표
 print(inputboard_data)
 print(y_data)
 
@@ -34,5 +39,8 @@ sess = tf.Session()
 
 sess.run(tf.global_variables_initializer())
 
-rotate_data = [] #회전수
-movex_data = [] #움직일 x좌표
+for step in range(2001):
+    cost_val, hy_val, _ = sess.run([cost, hypothesis, train],
+                                    feed_dict={x1: inputboard_data, x2: inputshape_data, Y: y_data})
+    if step % 10 == 0:
+        print(step, "Cost: ", cost_val, "\nPrediction:\n", hy_val)
