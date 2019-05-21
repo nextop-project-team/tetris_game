@@ -64,6 +64,7 @@ class TetrisAI(object):
         f.writelines(','.join(data))
         f.write(",")
         f.write(str(BOARD_DATA.currentShape.shape))
+        f.write(","+str(strategy[0])+","+str(strategy[1]))
         f.write("\n")
         f.close()
         print(BOARD_DATA.getData())
