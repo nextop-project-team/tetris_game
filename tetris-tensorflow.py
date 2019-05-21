@@ -1,46 +1,58 @@
 import tensorflow as tf
 import numpy as np
 
-
-
 xy = np.loadtxt('1.csv', delimiter=',', dtype=np.float32)
-inputshape_data = xy[0] #입력 블럭모양
-inputboard_data = xy[0:220] #보드데이터
-y_data = xy[220:222]  #y데이터에 뭘 넣어야할지
-
+print(xy.shape)
+x_data = xy[:,:-2]
+y_data = xy[:,-2:] #회전 수
 
 #outputmovex_data= xy[] #출력 x움직임
 #outputrotate_data = xy[] #출력회전수
 #rotate_data = [] #회전수
 #movex_data = [] #움직일 x좌표
-print(inputboard_data)
-print(y_data)
+#print(inputshape_data)
+#print(inputboard_data)
+#print(y_data)
+#print(y_data2)
+
+nb_classes = 7  # 0 ~ 6
+
+X = tf.placeholder(tf.float32, [None, 16])
+Y = tf.placeholder(tf.int32, [None, 1])  # 0 ~ 6
 
 x1 = tf.placeholder(tf.float32)
 x2 = tf.placeholder(tf.float32)
 xy = tf.placeholder(tf.float32)
 
 
-Y = tf.placeholder(tf.float32)
-
-w1 = tf.Variable(tf.random_normal([1]), name='weight1')
-w2 = tf.Variable(tf.random_normal([1]), name='weight2')
-
+#Y = tf.placeholder(tf.float32)
+W = tf.Variable(tf.random_normal([220]), name='weight1')
 b = tf.Variable(tf.random_normal([1]), name='bias')
 
-hypothesis = x1 * w1 + x2 * w2  + b #가설 = 움직일x값
+logits = tf.matmul(X, W) + b
+hypothesis = tf.nn.softmax(logits)
 
-cost = tf.reduce_mean(tf.square(hypothesis - Y)) #손실함수
+# Cross entropy cost/loss
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits,
+                                                                 labels=tf.stop_gradient([Y_one_hot])))
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
 
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=1e-5) #경사하강
-train = optimizer.minimize(cost)
+prediction = tf.argmax(hypothesis, 1)
+correct_prediction = tf.equal(prediction, tf.argmax(Y_one_hot, 1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
-sess = tf.Session()
+# Launch graph
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
 
-sess.run(tf.global_variables_initializer())
+    for step in range(2001):
+        _, cost_val, acc_val = sess.run([optimizer, cost, accuracy], feed_dict={X: x_data, Y: y_data})
 
-for step in range(2001):
-    cost_val, hy_val, _ = sess.run([cost, hypothesis, train],
-                                    feed_dict={x1: inputboard_data, x2: inputshape_data, Y: y_data})
-    if step % 10 == 0:
-        print(step, "Cost: ", cost_val, "\nPrediction:\n", hy_val)
+        if step % 100 == 0:
+            print("Step: {:5}\tCost: {:.3f}\tAcc: {:.2%}".format(step, cost_val, acc_val))
+
+    # Let's see if we can predict
+    pred = sess.run(prediction, feed_dict={X: x_data})
+    # y_data: (N,1) = flatten => (N, ) matches pred.shape
+    for p, y in zip(pred, y_data.flatten()):
+        print("[{}] Prediction: {} True Y: {}".format(p == int(y), p, int(y)))
