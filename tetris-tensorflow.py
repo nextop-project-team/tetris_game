@@ -3,13 +3,18 @@ import numpy as np
 
 
 
-xy = np.loadtxt('데이터 입력받기', delimiter=',', dtype=np.float32)
-inputshape_data = xy[0] #x1
-inputboard_data = xy[:, 1: ] # 0에는 블럭모양 나머지는 보드값 --입력값,x2
-y_data = xy[] #y데이터에 뭘 넣어야할지
+xy = np.loadtxt('1.csv', delimiter=',', dtype=np.float32)
+#inputshape_data = xy[0] x1
+inputboard_data = xy[0:220] # 0에는 블럭모양 나머지는 보드값 --입력값,x2
+y_data = xy[220:222]  #y데이터에 뭘 넣어야할지
+
+print(inputboard_data)
+print(y_data)
 
 x1 = tf.placeholder(tf.float32)
 x2 = tf.placeholder(tf.float32)
+xy = tf.placeholder(tf.float32)
+
 
 Y = tf.placeholder(tf.float32)
 
@@ -29,8 +34,5 @@ sess = tf.Session()
 
 sess.run(tf.global_variables_initializer())
 
-
-
 rotate_data = [] #회전수
 movex_data = [] #움직일 x좌표
-
