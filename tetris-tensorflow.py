@@ -2,9 +2,9 @@ import tensorflow as tf
 import numpy as np
 
 xy = np.loadtxt('1.csv', delimiter=',', dtype=np.float32)
-print(xy.shape)
-x_data = xy[:,:-2]
-y_data = xy[:,-2:] #회전 수
+x_data = xy[:,:-1]
+y_data = xy[:,[-1]] #회전 수
+print(len(x_data[0]))
 
 #outputmovex_data= xy[] #출력 x움직임
 #outputrotate_data = xy[] #출력회전수
@@ -12,25 +12,28 @@ y_data = xy[:,-2:] #회전 수
 #movex_data = [] #움직일 x좌표
 #print(inputshape_data)
 #print(inputboard_data)
-#print(y_data)
-#print(y_data2)
+# print(x_data)
+# print(y_data)
 
-nb_classes = 7  # 0 ~ 6
 
-X = tf.placeholder(tf.float32, [None, 16])
+X = tf.placeholder(tf.float32, [None, 222])
 Y = tf.placeholder(tf.int32, [None, 1])  # 0 ~ 6
 
-x1 = tf.placeholder(tf.float32)
-x2 = tf.placeholder(tf.float32)
-xy = tf.placeholder(tf.float32)
+Y_one_hot = tf.one_hot(Y, 1)  # one hot
+print("one_hot:", Y_one_hot)
+Y_one_hot = tf.reshape(Y_one_hot, [-1, 10])
+print("reshape one_hot:", Y_one_hot)
 
 
-#Y = tf.placeholder(tf.float32)
-W = tf.Variable(tf.random_normal([220]), name='weight1')
-b = tf.Variable(tf.random_normal([1]), name='bias')
+W = tf.Variable(tf.random_normal([222,10]), name='weight1')
+b = tf.Variable(tf.random_normal([10]), name='bias')
 
 logits = tf.matmul(X, W) + b
 hypothesis = tf.nn.softmax(logits)
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+print(sess.run(hypothesis,feed_dict={X: x_data}))
 
 # Cross entropy cost/loss
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits,
