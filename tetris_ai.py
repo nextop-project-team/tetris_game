@@ -4,7 +4,10 @@
 from tetris_model import BOARD_DATA, Shape   #BOARD_DATA, shape 받아옴
 import math
 from datetime import datetime
+from tetris_tensorflow import AI
 import numpy as np
+
+
 #블럭모양
  #ㅁㅁ     ㅁㅁ  ㅁㅁㅁ    ㅁㅁ
   # ㅁㅁ   ㅁㅁ    ㅁ    ㅁㅁ
