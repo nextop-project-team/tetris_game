@@ -9,7 +9,7 @@ import numpy as np
  #ㅁㅁ     ㅁㅁ  ㅁㅁㅁ    ㅁㅁ
   # ㅁㅁ   ㅁㅁ    ㅁ    ㅁㅁ
   #    Z모양  O모양  T모양  S모양
-   #ㅁ                 
+   #ㅁ
    #ㅁ     ㅁ        ㅁ
    #ㅁ     ㅁ        ㅁ
    #ㅁ     ㅁㅁ    ㅁㅁ
@@ -44,19 +44,21 @@ class TetrisAI(object):
         else: #나머지(T,L,J)
             d1Range = (0, 1, 2, 3)
 
-        for d0 in d0Range:
+        for d0 in d0Range: #위에서 설정한 d0 범위 탐색
             minX, maxX, _, _ = BOARD_DATA.currentShape.getBoundingOffsets(d0) #최소,최대X설정
             for x0 in range(-minX, BOARD_DATA.width - maxX): # 범위 -최소x,보드너비-최대x
                 board = self.calcStep1Board(d0, x0)
-                for d1 in d1Range:
+                for d1 in d1Range: #d1범위 탐색
                     minX, maxX, _, _ = BOARD_DATA.nextShape.getBoundingOffsets(d1)
                     dropDist = self.calcNextDropDist(board, d1, range(-minX, BOARD_DATA.width - maxX)) #떨어지는거리?
                     for x1 in range(-minX, BOARD_DATA.width - maxX): #범위(-최소x,보드너비-최대x)
                         score = self.calculateScore(np.copy(board), d1, x1, dropDist)
                         if not strategy or strategy[2] < score: #strategy또는 strategy[2]둘중하나라도 < score 면
-                            strategy = (d0, x0, score) #strategy = 현재값
-        print("===", datetime.now() - t1)
+                            strategy = (d0, x0, score) #d0=회전수,x0=x좌표 좌측하단이 기준, 블럭이 쌓인층이 많을수록 score작아짐
+                                                       #쌓인블럭 제거할수록 score값 증가함
+        print("===", datetime.now() - t1) #걸린시간인듯
         print(strategy)
+#       print(BOARD_DATA.backBoard)
         return strategy
 
     def calcNextDropDist(self, data, d0, xRange):
@@ -132,13 +134,14 @@ class TetrisAI(object):
         maxHeight = max(roofY) - fullLines
         # print(datetime.now() - t1)
 
+
         roofDy = [roofY[i] - roofY[i+1] for i in range(len(roofY) - 1)]
 
-        if len(roofY) <= 0:
+        if len(roofY) <= 0:#roofY의 표준편차
             stdY = 0
         else:
             stdY = math.sqrt(sum([y ** 2 for y in roofY]) / len(roofY) - (sum(roofY) / len(roofY)) ** 2)
-        if len(roofDy) <= 0:
+        if len(roofDy) <= 0: #roofDy의 표준편차
             stdDY = 0
         else:
             stdDY = math.sqrt(sum([y ** 2 for y in roofDy]) / len(roofDy) - (sum(roofDy) / len(roofDy)) ** 2)
@@ -149,9 +152,8 @@ class TetrisAI(object):
 
         score = fullLines * 1.8 - vHoles * 1.0 - vBlocks * 0.5 - maxHeight ** 1.5 * 0.02 \
             - stdY * 0.0 - stdDY * 0.01 - absDy * 0.2 - maxDy * 0.3
-       # print(score, fullLines, vHoles, vBlocks, maxHeight, stdY, stdDY, absDy, roofY, d0, x0, d1, x1)
+        #print(score, fullLines, vHoles, vBlocks, maxHeight, stdY, stdDY, absDy, roofY, d1, x1)
         return score
 
 
 TETRIS_AI = TetrisAI()
-
