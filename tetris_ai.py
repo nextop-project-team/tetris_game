@@ -22,46 +22,7 @@ import numpy as np
 class TetrisAI(object):
 
     def nextMove(self): #다음 움직임
-        t1 = datetime.now() #t1 = 현재시간
-        if BOARD_DATA.currentShape == Shape.shapeNone: #model의 현재모양이 없으면 None
-            return None
-
-        currentDirection = BOARD_DATA.currentDirection #model에서 현재 방향 받아옴
-        currentY = BOARD_DATA.currentY #model 에서 현재 Y 받아옴
-        _, _, minY, _ = BOARD_DATA.nextShape.getBoundingOffsets(0) #최소 Y값 받아옴
-        nextY = -minY #다음Y = -최소Y
-
-        # print("=======")
-        strategy = None  #전략? None
-        if BOARD_DATA.currentShape.shape in (Shape.shapeI, Shape.shapeZ, Shape.shapeS): #현재블럭모양 I,Z,S이면
-            d0Range = (0, 1)
-        elif BOARD_DATA.currentShape.shape == Shape.shapeO: #현재블럭모양 O이면
-            d0Range = (0,)
-        else:#나머지(T,L,J)
-            d0Range = (0, 1, 2, 3)
-
-        if BOARD_DATA.nextShape.shape in (Shape.shapeI, Shape.shapeZ, Shape.shapeS): #다음블럭모양 I,Z,S이면
-            d1Range = (0, 1)
-        elif BOARD_DATA.nextShape.shape == Shape.shapeO: #다음블럭모양 O이면
-            d1Range = (0,)
-        else: #나머지(T,L,J)
-            d1Range = (0, 1, 2, 3)
-
-        for d0 in d0Range: #위에서 설정한 d0 범위 탐색
-            minX, maxX, _, _ = BOARD_DATA.currentShape.getBoundingOffsets(d0) #최소,최대X설정
-            for x0 in range(-minX, BOARD_DATA.width - maxX): # 범위 -최소x,보드너비-최대x
-                board = self.calcStep1Board(d0, x0)
-                for d1 in d1Range: #d1범위 탐색
-                    minX, maxX, _, _ = BOARD_DATA.nextShape.getBoundingOffsets(d1)
-                    dropDist = self.calcNextDropDist(board, d1, range(-minX, BOARD_DATA.width - maxX)) #떨어지는거리?
-                    for x1 in range(-minX, BOARD_DATA.width - maxX): #범위(-최소x,보드너비-최대x)
-                        score = self.calculateScore(np.copy(board), d1, x1, dropDist)
-                        if not strategy or strategy[2] < score: #strategy또는 strategy[2]둘중하나라도 < score 면
-                            strategy = (d0, x0, score) #d0=회전수,x0=x좌표 좌측하단이 기준, 블럭이 쌓인층이 많을수록 score작아짐
-                                                       #쌓인블럭 제거할수록 score값 증가함
-        print("===", datetime.now() - t1) #걸린시간인듯
-        print(strategy)
-#       print(BOARD_DATA.backBoard)
+        strategy = (0, 0, 0)
         return strategy
 
     def calcNextDropDist(self, data, d0, xRange):

@@ -3,7 +3,7 @@ import numpy as np
 
 
 class ai:
-    def nextmove(self):
+    def train(self):
         xy = np.loadtxt('1.csv', delimiter=',', dtype=np.float32)
         x_data = xy[:,:-1]
         y_data = xy[:,[-1]] #회전 수
