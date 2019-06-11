@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-
+import tensorflow as tf
 import sys, random
 from PyQt5.QtWidgets import QMainWindow, QFrame, QDesktopWidget, QApplication, QHBoxLayout, QLabel
 from PyQt5.QtCore import Qt, QBasicTimer, pyqtSignal
@@ -10,7 +10,7 @@ from tetris_model import BOARD_DATA, Shape
 from tetris_ai import TETRIS_AI
 
 
-# TETRIS_AI = None
+#TETRIS_AI = None
 # 테트리스
 
 class Tetris(QMainWindow):
@@ -90,19 +90,19 @@ class Tetris(QMainWindow):
         if event.timerId() == self.timer.timerId():
             if TETRIS_AI and not self.nextMove:
                 self.nextMove = TETRIS_AI.nextMove()
-            if self.nextMove:
+            if self.nextMove: #nextMove[0] = d0, nextMove[1] = x0
                 k = 0
-                while BOARD_DATA.currentDirection != self.nextMove[0] and k < 4:
+                while BOARD_DATA.currentDirection != self.nextMove[0] and k < 4: #d0와 같을때까지 회전
                     BOARD_DATA.rotateRight()
                     k += 1
                 k = 0
-                while BOARD_DATA.currentX != self.nextMove[1] and k < 5:
+                while BOARD_DATA.currentX != self.nextMove[1] and k < 5: # x0과 같은 위치로 이동
                     if BOARD_DATA.currentX > self.nextMove[1]:
                         BOARD_DATA.moveLeft()
                     elif BOARD_DATA.currentX < self.nextMove[1]:
                         BOARD_DATA.moveRight()
                     k += 1
-            # lines = BOARD_DATA.dropDown()
+            #lines = BOARD_DATA.dropDown()
             lines = BOARD_DATA.moveDown()
             self.tboard.score += lines
             if self.lastShape != BOARD_DATA.currentShape:

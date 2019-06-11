@@ -52,7 +52,7 @@ class Shape(object):
 
     def getBoundingOffsets(self, direction):
         tmpCoords = self.getRotatedOffsets(direction)
-        minX, maxX, minY, maxY = 0, 0, 0, 0
+        minX, maxX, minY, maxY = 0, 0, 0, 0 
         for x, y in tmpCoords:
             if minX > x:
                 minX = x
